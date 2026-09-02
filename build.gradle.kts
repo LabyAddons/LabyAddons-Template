@@ -5,18 +5,17 @@ plugins {
 
 val versions = providers.gradleProperty("net.labymod.minecraft-versions").get().split(";")
 
-group = "org.example"
+group = "de.jardateien"
 version = providers.environmentVariable("VERSION").getOrElse("1.0.0")
 
 labyMod {
-    defaultPackageName = "org.example" //change this to your main package name (used by all modules)
+    defaultPackageName = "de.jardateien"
 
     minecraft {
         registerVersion(versions.toTypedArray()) {
             runs {
                 getByName("client") {
-                    // When the property is set to true, you can log in with a Minecraft account
-                    // devLogin = true
+                    devLogin = true
                 }
             }
         }
@@ -25,7 +24,7 @@ labyMod {
     addonInfo {
         namespace = "example"
         displayName = "ExampleAddon"
-        author = "Example Author"
+        author = "JarDateien"
         description = "Example Description"
         minecraftVersion = "*"
         version = rootProject.version.toString()
