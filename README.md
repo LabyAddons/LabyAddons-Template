@@ -1,138 +1,357 @@
 # LabyMod Addon Template
 
-A minimal LabyMod addon template to get you started building LabyMod addons with Gradle and the official LabyMod Gradle plugins.
+A clean and ready-to-use **LabyMod Addon Template** for building your own LabyMod addons with Gradle and the official LabyMod Gradle plugins.
 
-This repository provides:
-- A multi-module Gradle project (api, core, game-runner) configured for LabyMod development.
-- A working example addon implementation (core) with configuration, commands and a listener.
-- Gradle wrapper and a GitHub Actions workflow for CI.
+Whether you're creating your first addon or starting a larger project, this template provides a structured foundation with everything you need to get started quickly.
 
----
+## ✨ Features
 
-## Quick overview
-
-- Group: `de.jardateien` (see root Gradle configuration)
-- Example addon namespace: `example`
-- Display name: `ExampleAddon`
-- Author: `JarDateien`
-- Java compatibility: Java 21 (set in subprojects)
-- Where the main addon lives: `core/src/main/java/de/jardateien/core/ExampleAddon.java`
+* 🧩 Multi-module Gradle project
+* 🎮 LabyMod development environment
+* ⚙️ Example addon with configuration
+* 💬 Example commands and subcommands
+* 🌍 Internationalization support
+* 🚀 GitHub Actions CI workflow
+* 🛠️ Gradle Wrapper included
+* 📦 Ready-to-customize addon structure
 
 ---
 
-## Prerequisites
+## 📋 Quick Overview
 
-- JDK 21
-- Git
-- Network access to resolve dependencies
-- Gradle wrapper is included; you can use `./gradlew` (Unix/macOS) or `gradlew.bat` (Windows)
-
----
-
-## Build
-
-From the repository root:
-
-- Build everything:
-  - Unix/macOS: `./gradlew build`
-  - Windows: `gradlew.bat build`
-
-- Build only the core module:
-  - `./gradlew :core:build`
-
-The project uses the included Gradle wrapper and the LabyMod Gradle plugin. Minecraft versions used for runs are read from the Gradle property `net.labymod.minecraft-versions` (see `gradle.properties`).
+| Property         | Value                             |
+| ---------------- | --------------------------------- |
+| **Group**        | `de.jardateien`                   |
+| **Namespace**    | `example`                         |
+| **Display Name** | `ExampleAddon`                    |
+| **Author**       | `JarDateien`                      |
+| **Java**         | 21                                |
+| **Main Class**   | `de.jardateien.core.ExampleAddon` |
 
 ---
 
-## Development / Run in dev environment
+## 📦 Project Structure
 
-The Gradle config already registers a `client` run — the project uses the LabyMod Gradle plugin to configure Minecraft runs. To start a development client, use the run task provided by the plugin (task name depends on plugin-generated tasks; commonly something like `runClient` or a custom run configured as `client`). Example (replace with the actual run task name if different):
+```text
+.
+├── api/
+│   └── src/
+│       └── main/
+│
+├── core/
+│   └── src/
+│       ├── main/
+│       │   ├── java/
+│       │   │   └── de/jardateien/core/
+│       │   │       ├── ExampleAddon.java
+│       │   │       ├── ExampleConfiguration.java
+│       │   │       └── commands/
+│       │   │
+│       │   └── resources/
+│       │       └── assets/
+│       │           └── example/
+│       │               └── i18n/
+│       │                   └── en_us.json
+│
+├── game-runner/
+│
+├── gradle/
+├── build.gradle.kts
+├── gradle.properties
+├── gradlew
+├── gradlew.bat
+└── settings.gradle.kts
+```
 
-- `./gradlew runClient` (or check `./gradlew tasks` for the exact run task)
+### Modules
 
-In the build script you can enable dev login for the client run by uncommenting or setting `devLogin = true` in the `labyMod { minecraft { ... runs { getByName("client") { devLogin = true } } } }` block.
+**`api/`**
+Contains API-related classes and interfaces used by the addon.
 
----
+**`core/`**
+The main addon module containing the actual addon implementation, configuration, commands and resources.
 
-## Project structure
-
-- `api/` — API module where annotation-processor and API-only interfaces live.
-  - `api/build.gradle.kts` configures annotation processor/reference type.
-- `core/` — Main addon implementation (contains the example addon).
-  - `core/src/main/java/org/example/core/ExampleAddon.java` — addon entry point (annotated with `@AddonMain`).
-  - `core/src/main/java/org/example/core/ExampleConfiguration.java` — example configuration class (with a boolean enabled property).
-  - `core/src/main/java/org/example/core/commands/` — example chat command (`ping` and subcommand `pong`).
-  - `core/src/main/resources/assets/example/i18n/en_us.json` — example localization file.
-- `game-runner/` — helper module for running the game in specific configurations (contains `gradle.properties` for runs).
-- `gradle/`, `gradlew`, `gradlew.bat` — Gradle wrapper and tooling.
-- `.github/workflows/build.yml` — GitHub Actions workflow to build the project on push/PR.
-
----
-
-## Example usage (commands)
-
-The example addon registers a simple chat command:
-
-- `/ping` → displays `Ping!` (uses color AQUA)
-- `/pong` (alias/sub-command) → displays `Ping Pong!` (GRAY)
-- Using the alias registered (`"pong"`) will display `Pong!` as the main command's alternate response.
-
-(See `core/src/main/java/de/jardateien/core/commands/ExamplePingCommand.java` and `ExamplePingSubCommand.java`.)
-
----
-
-## Customization
-
-Before publishing your addon, make these common edits:
-
-- Change the group and package names:
-  - Edit `group` in `build.gradle.kts` (root) and update `defaultPackageName` to your package (e.g., `com.myname.addon`).
-  - Move Java/Kotlin sources to match the new package path (update directory structure under `core/src/main/java`).
-
-- Update addon metadata (in `build.gradle.kts` root `labyMod.addonInfo` block):
-  - `namespace` — unique addon id (used for assets/namespace).
-  - `displayName` — visible name for your addon.
-  - `author` — author name(s).
-  - `description` — short description shown in UIs.
-  - `minecraftVersion` — restrict to a Minecraft version or leave `*` for all.
-
-- Add dependencies used by your addon in `core/build.gradle.kts` (example of adding external maven dependency is included as a commented line).
+**`game-runner/`**
+Provides the configuration required to run Minecraft in the development environment.
 
 ---
 
-## Internationalization and assets
+## 🔧 Prerequisites
 
-- Locale files live under:
-  - `core/src/main/resources/assets/<namespace>/i18n/`
-  - Example: `core/src/main/resources/assets/example/i18n/en_us.json`
+Before getting started, make sure you have:
 
-- Replace `example` namespace and update translations as needed.
+* **JDK 21**
+* **Git**
+* An internet connection for downloading dependencies
+* A compatible IDE such as IntelliJ IDEA
 
----
-
-## CI
-
-A GitHub Actions workflow is provided at `.github/workflows/build.yml` to build the project on push and pull requests. Adjust the workflow if you need publishing steps or additional checks.
+The project already includes the **Gradle Wrapper**, so you do not need to install Gradle manually.
 
 ---
 
-## Contributing
+## 🚀 Getting Started
 
-1. Fork the repo and create a feature branch.
-2. Make changes, ensure they compile: `./gradlew build`.
-3. Open a Pull Request describing your changes.
-4. Add tests or examples when appropriate.
+Clone the repository and enter the project directory:
 
-If you'd like a contribution guide or issue templates, add them under `.github/`.
+```bash
+git clone https://github.com/LabyAddons/LabyAddons-Template.git
+cd LabyAddons-Template
+```
 
----
-
-## License
-
-No license file is included in this template. Add a `LICENSE` (for example MIT, Apache-2.0) to indicate how others may use your code.
+You can then import the project into your preferred Java IDE.
 
 ---
 
-If you want, I can:
-- Generate a ready-to-commit README.md file with this content.
-- Add a basic LICENSE (MIT / Apache-2.0) and a CONTRIBUTING.md template.
+## 🏗️ Build
+
+Build the complete project from the repository root:
+
+### Linux / macOS
+
+```bash
+./gradlew build
+```
+
+### Windows
+
+```bat
+gradlew.bat build
+```
+
+To build only the core module:
+
+```bash
+./gradlew :core:build
+```
+
+The project uses the included Gradle Wrapper and the official LabyMod Gradle plugin.
+
+Minecraft versions used by the development environment are configured through:
+
+```text
+gradle.properties
+```
+
+---
+
+## 🎮 Development Environment
+
+The template already contains a configured Minecraft client run.
+
+To see all available Gradle tasks:
+
+```bash
+./gradlew tasks
+```
+
+Depending on the generated LabyMod Gradle tasks, the development client can usually be started with:
+
+```bash
+./gradlew runClient
+```
+
+The exact task name may vary depending on the configured Minecraft version and LabyMod Gradle plugin version.
+
+### Development Login
+
+If required, you can enable the development login for the configured client run:
+
+```kotlin
+runs {
+    getByName("client") {
+        devLogin = true
+    }
+}
+```
+
+This can be found inside the `labyMod` Minecraft run configuration in `build.gradle.kts`.
+
+---
+
+## 💬 Example Commands
+
+The template includes a small example command implementation.
+
+### `/ping`
+
+Displays:
+
+```text
+Ping!
+```
+
+### `/ping pong`
+
+Displays:
+
+```text
+Ping Pong!
+```
+
+The example also demonstrates how aliases and subcommands can be registered.
+
+Relevant files:
+
+```text
+core/src/main/java/de/jardateien/core/commands/
+```
+
+---
+
+## ⚙️ Customization
+
+Before using the template for your own addon, update the following values.
+
+### Package
+
+Change the project group and default package in:
+
+```text
+build.gradle.kts
+```
+
+For example:
+
+```kotlin
+group = "com.example"
+```
+
+and:
+
+```kotlin
+defaultPackageName = "com.example.myaddon"
+```
+
+Make sure to move your Java/Kotlin source files so that the directory structure matches the new package.
+
+---
+
+### Addon Information
+
+Update the addon metadata inside the `labyMod.addonInfo` block:
+
+```kotlin
+labyMod {
+    addonInfo {
+        namespace = "myaddon"
+        displayName = "MyAddon"
+        author = "YourName"
+        description = "Your addon description"
+        minecraftVersion = "*"
+    }
+}
+```
+
+#### Important properties
+
+| Property           | Description                     |
+| ------------------ | ------------------------------- |
+| `namespace`        | Unique identifier of your addon |
+| `displayName`      | Name displayed to users         |
+| `author`           | Author or organization          |
+| `description`      | Short addon description         |
+| `minecraftVersion` | Supported Minecraft version(s)  |
+
+---
+
+## 🌍 Internationalization
+
+Translations are stored inside:
+
+```text
+core/src/main/resources/assets/<namespace>/i18n/
+```
+
+For example:
+
+```text
+core/src/main/resources/assets/example/i18n/en_us.json
+```
+
+You can add additional languages by creating the corresponding locale files.
+
+For example:
+
+```text
+en_us.json
+de_de.json
+fr_fr.json
+```
+
+When changing your addon namespace, make sure to update the corresponding resource directory as well.
+
+---
+
+## 📚 Dependencies
+
+Additional dependencies can be added in:
+
+```text
+core/build.gradle.kts
+```
+
+For example:
+
+```kotlin
+dependencies {
+    implementation("group:artifact:version")
+}
+```
+
+Only add dependencies that are actually required by your addon.
+
+---
+
+## 🤖 GitHub Actions
+
+The template includes a GitHub Actions workflow:
+
+```text
+.github/workflows/build.yml
+```
+
+The workflow automatically builds the project when changes are pushed or pull requests are created.
+
+You can extend the workflow with additional steps such as:
+
+* Automated tests
+* Artifact uploads
+* Release builds
+* Publishing
+* Additional code checks
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome!
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Make your changes.
+4. Verify that the project builds successfully.
+5. Open a Pull Request with a description of your changes.
+
+Before submitting a Pull Request, make sure the project still builds successfully:
+
+```bash
+./gradlew build
+```
+
+---
+
+## 📄 License
+
+This project is licensed under the **LabyAddons Community License**.
+
+The license allows you to use, modify, fork, distribute and commercially use the project, provided that the required attribution remains.
+
+See the [`LICENSE`](LICENSE) file for the complete license terms.
+
+---
+
+## ❤️ LabyAddons
+
+This template is maintained as part of **LabyAddons** and is intended to make starting with LabyMod addon development easier.
+
+**Created by [LabyAddons](https://github.com/LabyAddons)**
